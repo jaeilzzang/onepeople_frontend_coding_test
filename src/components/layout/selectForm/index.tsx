@@ -1,33 +1,56 @@
-import FlexComponents from "components/elements/flex";
 import InputComponents from "components/elements/input";
 import TextAreaComponents from "components/elements/input/textarea";
-import TextComponents from "components/elements/text";
-import { MdCancel } from "react-icons/md";
-import styled from "styled-components";
 
-import { SelectFormType } from "type/type";
+import {
+  AnswerType,
+  SelectFormType,
+  handleAddForm,
+  handleDeleteForm,
+  handleOnChangeInputForm,
+} from "type";
+
+import RadioForm from "./radioForm";
 import AddOption from "../addOption";
+import TextComponents from "components/elements/text";
 
-interface Props {
+export interface Props {
+  id: number;
   type: SelectFormType;
+  answer: AnswerType[];
+  handleAddForm: handleAddForm;
+  handleDeleteForm: handleDeleteForm;
+  handleOnChangeInputForm: handleOnChangeInputForm;
 }
 
-const SelectFormComponents = ({ type }: Props) => {
+const SelectFormComponents = ({
+  id,
+  type,
+  answer,
+  handleAddForm,
+  handleDeleteForm,
+  handleOnChangeInputForm,
+}: Props) => {
   switch (type) {
     case "short": {
       return (
         <InputComponents
           type="text"
-          placeholder="100자 이내의 답변을 받을 수 있는 란 입니다."
+          name={type}
+          value={answer[0].value}
           maxLength={100}
+          onChange={handleOnChangeInputForm}
+          placeholder="100자 이내의 답변을 받을 수 있는 란 입니다."
         />
       );
     }
     case "long": {
       return (
         <TextAreaComponents
-          placeholder="250자 이내의 답변을 받을 수 있는 란 입니다."
+          name={type}
+          value={answer[0].value}
           maxLength={100}
+          onChange={handleOnChangeInputForm}
+          placeholder="250자 이내의 답변을 받을 수 있는 란 입니다."
         />
       );
     }
@@ -35,15 +58,19 @@ const SelectFormComponents = ({ type }: Props) => {
       return (
         <>
           <TextComponents size={14}>체크항목</TextComponents>
+          {answer.map((ans, idx: number) => (
+            <RadioForm
+              id={idx}
+              key={idx}
+              type="check"
+              value={ans.value}
+              checked={ans.checked}
+              onChange={handleOnChangeInputForm}
+              handleDeleteForm={handleDeleteForm}
+            />
+          ))}
 
-          <FlexComponents between>
-            <InputContainer>
-              <InputComponents id="option1" type="checkbox" sizes={16} />
-              <InputComponents type="text" />
-            </InputContainer>
-            <MdCancel />
-          </FlexComponents>
-          <AddOption />
+          <AddOption id={id} handleAddForm={handleAddForm} />
         </>
       );
     }
@@ -51,36 +78,22 @@ const SelectFormComponents = ({ type }: Props) => {
       return (
         <>
           <TextComponents size={14}>선택항목</TextComponents>
-
-          <FlexComponents between>
-            <InputContainer>
-              <InputComponents id="option1" type="radio" sizes={16} />
-              <InputComponents type="text" />
-            </InputContainer>
-            <MdCancel />
-          </FlexComponents>
-          <AddOption />
+          {answer.map((ans, idx: number) => (
+            <RadioForm
+              key={idx}
+              id={idx}
+              type="radio"
+              value={ans.value}
+              checked={ans.checked}
+              onChange={handleOnChangeInputForm}
+              handleDeleteForm={handleDeleteForm}
+            />
+          ))}
+          <AddOption id={id} handleAddForm={handleAddForm} />
         </>
       );
     }
   }
 };
-
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 0.5rem;
-
-  &:not(last-child) {
-    margin-left: 0.5rem;
-    margin-top: 8px;
-    margin-bottom: 8px;
-  }
-
-  input {
-    padding: 2px 8px;
-  }
-`;
 
 export default SelectFormComponents;

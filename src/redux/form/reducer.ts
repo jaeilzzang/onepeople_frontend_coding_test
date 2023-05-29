@@ -1,31 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { FORM_ACTION } from "./type";
-import { SelectFormType } from "type/type";
+import { InputProps } from "type";
 
 interface FormState {
-  addForm: boolean;
-  selectFrom: SelectFormType;
+  copy: boolean;
+  copyData: InputProps | null;
 }
 
 const initialState: FormState = {
-  addForm: false,
-  selectFrom: "short",
+  copy: false,
+  copyData: null,
 };
 
 export const formActionSlice = createSlice({
   name: FORM_ACTION,
   initialState,
   reducers: {
-    addForm: (state, actions) => {
-      state.addForm = actions.payload;
+    copyActions: (state, actions) => {
+      state.copy = actions.payload;
     },
-    selectForm: (state, action) => {
-      state.selectFrom = action.payload;
+    copyDataActions: (state, actions) => {
+      if (state.copy) {
+        state.copyData = actions.payload;
+        state.copy = false;
+      } else if (!state.copy && actions.payload === null) {
+        state.copyData = actions.payload;
+      }
     },
   },
 });
 
-export const { addForm, selectForm } = formActionSlice.actions;
+export const { copyActions, copyDataActions } = formActionSlice.actions;
 
 export default formActionSlice.reducer;

@@ -1,13 +1,22 @@
 import FlexComponents from "components/elements/flex";
 import TextComponents from "components/elements/text";
-import styled from "styled-components";
 
-const AddOption = () => {
+import styled from "styled-components";
+import { FromType } from "type";
+
+interface Props {
+  id: number;
+  handleAddForm: (id: number, type: FromType) => void;
+}
+
+const AddOption = ({ id, handleAddForm }: Props) => {
   return (
     <FlexComponents>
-      <TextBtn>항목 추가</TextBtn>
+      <TextBtn onClick={() => handleAddForm(id, "Answer")}>항목 추가</TextBtn>
       <TextComponents size={14}>또는 </TextComponents>
-      <TextBtn>기타 항목 추가</TextBtn>
+      <TextBtn onClick={() => handleAddForm(id, "Answer")}>
+        기타 항목 추가
+      </TextBtn>
     </FlexComponents>
   );
 };

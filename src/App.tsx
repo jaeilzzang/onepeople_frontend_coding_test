@@ -1,29 +1,22 @@
+import EditPage from "components/page/edit";
 import QuestionPage from "components/page/question";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addForm } from "redux/form/reducer";
-import { RootState } from "redux/store";
+import SubmitPage from "components/page/submit";
+import { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ROUTE } from "route";
 
 function App() {
-  const select = useSelector((state: RootState) => state.formReducer);
-  const dispatch = useDispatch();
-  const [question, setQuestion] = useState<JSX.Element[]>([<QuestionPage />]);
-
-  useEffect(() => {
-    if (!select.addForm) {
-      return;
-    }
-
-    setQuestion((prev) => [...prev, <QuestionPage />]);
-    dispatch(addForm(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [select.addForm]);
-
   return (
     <section>
-      {question.map((Components, idx) => (
-        <React.Fragment key={idx}>{Components}</React.Fragment>
-      ))}
+      <Suspense fallback={<div>...loading</div>}>
+        <BrowserRouter>
+          <Routes>
+            <Route path={ROUTE.HOME} element={<QuestionPage />} />
+            <Route path={ROUTE.FORM} element={<SubmitPage />} />
+            <Route path={ROUTE.EDIT} element={<EditPage />} />
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
     </section>
   );
 }

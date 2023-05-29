@@ -1,3 +1,4 @@
 import { RootState } from "redux/store";
 
-export const selectForm = (state: RootState) => state.formReducer.selectFrom;
+export const copyDataSelect = (state: RootState) => state.formReducer.copyData;
+export const copySelect = (state: RootState) => state.formReducer.copy;

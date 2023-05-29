@@ -1,19 +1,15 @@
 import { ReactNode } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
-interface Props extends StyledProps {
+interface Props {
   children: ReactNode;
 }
 
-interface StyledProps {
-  active?: boolean;
-}
-
-const BoxComponents = ({ children, active }: Props) => {
-  return <BoxContainer active={active}>{children}</BoxContainer>;
+const BoxComponents = ({ children }: Props) => {
+  return <BoxContainer>{children}</BoxContainer>;
 };
 
-const BoxContainer = styled.div<StyledProps>`
+const BoxContainer = styled.div`
   max-width: 768px;
   min-width: 272px;
 
@@ -24,11 +20,11 @@ const BoxContainer = styled.div<StyledProps>`
 
   border: 1px solid black;
 
-  ${({ active }) =>
-    active &&
-    css`
-      border-left: blue 10px solid;
-    `};
+  border-left: gray 10px solid;
+
+  &:focus-within {
+    border-left: #2d2dea 10px solid;
+  }
 
   @media screen and (max-width: 768px) {
     margin: 1rem 24px;

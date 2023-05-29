@@ -1,6 +1,6 @@
 import { MouseEventHandler, ReactNode } from "react";
 import styled, { css } from "styled-components";
-import { CommonCSS } from "type/common";
+import { CommonCSS } from "type/css";
 
 interface Props extends StyledProps {
   children: ReactNode;

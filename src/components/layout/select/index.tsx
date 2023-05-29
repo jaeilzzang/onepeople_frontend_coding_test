@@ -1,60 +1,37 @@
+import { MouseEvent, MouseEventHandler } from "react";
 import styled from "styled-components";
+
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 import FlexComponents from "components/elements/flex";
-import { MouseEvent, MouseEventHandler, useState } from "react";
+import { OptionsType } from "type";
 
-import { selectForm } from "redux/form/reducer";
-import { SelectFormType } from "type/type";
-import { useDispatch } from "react-redux";
-
-interface OptionsType {
-  id: SelectFormType;
+interface Props<T> {
+  options: T[];
+  handleMouseLeave: () => void;
+  handleShowOptions: MouseEventHandler<HTMLDivElement>;
+  currentSelect: number;
+  handleSelectOptions: (
+    e: MouseEvent<HTMLOptionElement>,
+    selectId: number
+  ) => void;
+  isShow: boolean;
   name: string;
 }
 
-const options: OptionsType[] = [
-  {
-    name: "단문형 답변",
-    id: "short",
-  },
-  {
-    id: "long",
-    name: "장문형 답변",
-  },
-  {
-    id: "check",
-    name: "체크박스 답변",
-  },
-  {
-    id: "radio",
-    name: "객관식 답변",
-  },
-];
-
-const SelectComponents = () => {
-  const dispatch = useDispatch();
-
-  const [currentSelect, setCurrentSelect] = useState<number>(0);
-  const [isShow, setIsShow] = useState<Boolean>(false);
-
-  const onClick: MouseEventHandler<HTMLDivElement> = (e) => setIsShow(!isShow);
-
-  const handleOptions = (
-    e: MouseEvent<HTMLOptionElement>,
-    selectId: number
-  ) => {
-    dispatch(selectForm(options[selectId].id));
-    setCurrentSelect(selectId);
-    setIsShow(!isShow);
-  };
-
-  const handleMouseLeave = () => isShow && setIsShow(false);
-
+const SelectComponents = <T extends OptionsType>({
+  name,
+  isShow,
+  options,
+  currentSelect,
+  handleMouseLeave,
+  handleSelectOptions,
+  handleShowOptions,
+}: Props<T>) => {
   return (
     <Select onMouseLeave={handleMouseLeave}>
-      <FlexComponents between onClick={onClick}>
-        <option>{options[currentSelect].name}</option>
+      <FlexComponents between onClick={handleShowOptions}>
+        <option id={name}>{options[currentSelect].name}</option>
 
         {isShow ? <MdArrowDropUp /> : <MdArrowDropDown />}
       </FlexComponents>
@@ -65,8 +42,9 @@ const SelectComponents = () => {
             (select, index) =>
               index !== currentSelect && (
                 <option
+                  id={name}
                   key={select.id}
-                  onClick={(e) => handleOptions(e, index)}
+                  onClick={(e) => handleSelectOptions(e, index)}
                 >
                   {select.name}
                 </option>
